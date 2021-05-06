@@ -1,1 +1,11 @@
-##
+require('./imagetools/plugin.min.js');
+require('./importword/plugin.min.js');
+require('./indent2em/plugin.min.js');
+require('./layout/plugin.min.js');
+require('./letterspacing/plugin.min.js');
+require('./lineheight/plugin.min.js');
+require('./table/plugin.min.js');
+require('./upfile/plugin.min.js');
+require('./bdmap/plugin.min.js');
+require('./axupimgs/plugin.min.js');
+require('./attachment/plugin.min.js');
