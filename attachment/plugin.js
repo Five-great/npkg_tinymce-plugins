@@ -1,3 +1,13 @@
+ /**
+ * attachment (Enhancement 1.5v) 2021-01-13
+ * 
+ * 
+ * https://github.com/Five-great/tinymce-plugins
+ * 
+ * Copyright 2021, Five(Li Hailong) The Chengdu, China https://www.fivecc.cn/
+ *
+ * Licensed under MIT
+ */
 !function() {
 	"use strict";
 	var Qeider = null;

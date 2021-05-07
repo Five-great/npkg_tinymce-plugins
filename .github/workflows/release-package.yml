@@ -17,4 +17,5 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          ##+1##345e73d8-061a-4896-b9fd-6635ab63c650
 

@@ -323,7 +323,16 @@
 	
 			//根据IP定位
 			var myCity = new BMap.LocalCity();
-			myCity.get(function(result){map.setCenter(result.name);});
+			myCity.get(function(result){
+				  map.setCenter(result.name);
+				  lng = result.center.lng;
+					lat = result.center.lat;
+					var marker = new BMap.Marker(new BMap.Point(lng, lat));
+					map.clearOverlays();
+					map.addOverlay(marker);
+					parent.tinymceLng = lng;
+					parent.tinymceLat = lat;	
+				});
 	
 			var gc = new BMap.Geocoder();
 			gc.getLocation(point, function(rs){

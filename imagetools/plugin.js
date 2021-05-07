@@ -1,52 +1,1355 @@
 /**
- * imagetools (Enhancement 1.1v)
- * The tinymce-plugins is used to import imagetools (Enhancement)
- * 
- * https://github.com/Five-great/tinymce-plugins
- * 
- * Copyright 2020, Five(Li Hailong) The Chengdu, China https://www.fivecc.cn/
- *
- * Licensed under MIT
- */
-(function(n){function K(a,b){var c=n.document.createElement("canvas");c.width=a;c.height=b;return c}function Ba(a){var b=K(a.width,a.height);b.getContext("2d").drawImage(a,0,0);return b}function Y(a){return new B(function(b,c){function d(){k();b(h)}function e(){k();c("Unable to load data of type "+a.type+": "+f)}var f=n.URL.createObjectURL(a),h=new n.Image,k=function(){h.removeEventListener("load",d);h.removeEventListener("error",e)};h.addEventListener("load",d);h.addEventListener("error",e);h.src=
-f;h.complete&&d()})}function Ca(a){return new B(function(b,c){var d=new n.XMLHttpRequest;d.open("GET",a,!0);d.responseType="blob";d.onload=function(){200===this.status&&b(this.response)};d.onerror=function(){if(0===this.status){var e=Error("No access to download image");e.code=18;e.name="SecurityError"}else e=Error("Error "+this.status+" downloading image");c(e)};d.send()})}function Da(a){var b=a.split(",");a=/data:([^;]+)/.exec(b[0]);if(!a)return y.none();a=a[1];b=n.atob(b[1]);for(var c=b.length,
-d=Math.ceil(c/1024),e=Array(d),f=0;f<d;++f){for(var h=1024*f,k=Math.min(h+1024,c),r=Array(k-h),w=0;h<k;++w,++h)r[w]=b[h].charCodeAt(0);e[f]=new Uint8Array(r)}return y.some(new n.Blob(e,{type:a}))}function Z(a){return new B(function(b,c){Da(a).fold(function(){c("uri is not base64: "+a)},b)})}function aa(a,b,c){b=b||"image/png";return n.HTMLCanvasElement.prototype.toBlob?new B(function(d,e){a.toBlob(function(f){f?d(f):e()},b,c)}):Z(a.toDataURL(b,c))}function Ea(a){return Y(a).then(function(b){n.URL.revokeObjectURL(b.src);
-var c=K(b.naturalWidth||b.width,b.naturalHeight||b.height);c.getContext("2d").drawImage(b,0,0);return c})}function Fa(a){return new B(function(b){var c=new n.FileReader;c.onloadend=function(){b(c.result)};c.readAsDataURL(a)})}function ba(a,b,c){function d(e,f){return a.then(function(h){return h.toDataURL(e||"image/png",f)})}return{getType:l(b.type),toBlob:function(){return B.resolve(b)},toDataURL:function(){return c},toBase64:function(){return c.split(",")[1]},toAdjustedBlob:function(e,f){return a.then(function(h){return aa(h,
-e,f)})},toAdjustedDataURL:d,toAdjustedBase64:function(e,f){return d(e,f).then(function(h){return h.split(",")[1]})},toCanvas:function(){return a.then(Ba)}}}function Ga(a){return Fa(a).then(function(b){return ba(Ea(a),a,b)})}function ca(a,b){return aa(a,b).then(function(c){return ba(B.resolve(a),c,a.toDataURL())})}function Ha(a,b){return a.toCanvas().then(function(c){var d=a.getType(),e=b,f=K(c.width,c.height),h=f.getContext("2d"),k=0,r=0;e=0>e?360+e:e;if(90===e||270===e){var w=f.width;f.width=f.height;
-f.height=w}if(90===e||180===e)k=f.width;if(270===e||180===e)r=f.height;h.translate(k,r);h.rotate(e*Math.PI/180);h.drawImage(c,0,0);return ca(f,d)})}function Ia(a,b){return a.toCanvas().then(function(c){var d=a.getType(),e=K(c.width,c.height),f=e.getContext("2d");"v"===b?(f.scale(1,-1),f.drawImage(c,0,-e.height)):(f.scale(-1,1),f.drawImage(c,-e.width,0));return ca(e,d)})}function da(a,b){return E.requestUrlAsBlob(a,{},b).then(function(c){return 200>c.status||300<=c.status?ea.handleHttpError(c.status):
-z.resolve(c.blob)})}var L=function(a){var b=a;return{get:function(){return b},set:function(c){b=c},clone:function(){return L(b)}}},Ja=tinymce.util.Tools.resolve("tinymce.PluginManager"),M=tinymce.util.Tools.resolve("tinymce.util.Tools"),Ka=function(){},l=function(a){return function(){return a}},F=l(!1),R=l(!0),N=function(){return S},S=function(){var a=function(d){return d.isNone()},b=function(d){return d()},c=function(d){return d};a={fold:function(d,e){return d()},is:F,isSome:F,isNone:R,getOr:c,getOrThunk:b,
-getOrDie:function(d){throw Error(d||"error: getOrDie called on none.");},getOrNull:l(null),getOrUndefined:l(void 0),or:c,orThunk:b,map:N,each:Ka,bind:N,exists:F,forall:R,filter:N,equals:a,equals_:a,toArray:function(){return[]},toString:l("none()")};Object.freeze&&Object.freeze(a);return a}(),T=function(a){var b=l(a),c=function(){return e},d=function(f){return f(a)},e={fold:function(f,h){return h(a)},is:function(f){return a===f},isSome:R,isNone:F,getOr:b,getOrThunk:b,getOrDie:b,getOrNull:b,getOrUndefined:b,
-or:c,orThunk:c,map:function(f){return T(f(a))},each:function(f){f(a)},bind:d,exists:d,forall:d,filter:function(f){return f(a)?e:S},toArray:function(){return[a]},toString:function(){return"some("+a+")"},equals:function(f){return f.is(a)},equals_:function(f,h){return f.fold(F,function(k){return h(a,k)})}};return e},y={some:T,none:N,from:function(a){return null===a||void 0===a?S:T(a)}},t=function(){function a(g,m){return function(){return g.apply(m,arguments)}}function b(g){var m=this;null===this._state?
-this._deferreds.push(g):r(function(){var p=m._state?g.onFulfilled:g.onRejected;if(null===p)(m._state?g.resolve:g.reject)(m._value);else{try{var q=p(m._value)}catch(x){g.reject(x);return}g.resolve(q)}})}function c(g){try{if(g===this)throw new TypeError("A promise cannot be resolved with itself.");if(g&&("object"===typeof g||"function"===typeof g)){var m=g.then;if("function"===typeof m){h(a(m,g),a(c,this),a(d,this));return}}this._state=!0;this._value=g;e.call(this)}catch(p){d.call(this,p)}}function d(g){this._state=
-!1;this._value=g;e.call(this)}function e(){for(var g=0,m=this._deferreds;g<m.length;g++)b.call(this,m[g]);this._deferreds=[]}function f(g,m,p,q){this.onFulfilled="function"===typeof g?g:null;this.onRejected="function"===typeof m?m:null;this.resolve=p;this.reject=q}function h(g,m,p){var q=!1;try{g(function(x){q||(q=!0,m(x))},function(x){q||(q=!0,p(x))})}catch(x){q||(q=!0,p(x))}}var k=function(g){if("object"!==typeof this)throw new TypeError("Promises must be constructed via new");if("function"!==typeof g)throw new TypeError("not a function");
-this._value=this._state=null;this._deferreds=[];h(g,a(c,this),a(d,this))},r=k.immediateFn||"function"===typeof window.setImmediate&&window.setImmediate||function(g){n.setTimeout(g,1)},w=Array.isArray||function(g){return"[object Array]"===Object.prototype.toString.call(g)};k.prototype.catch=function(g){return this.then(null,g)};k.prototype.then=function(g,m){var p=this;return new k(function(q,x){b.call(p,new f(g,m,q,x))})};k.all=function(){for(var g=[],m=0;m<arguments.length;m++)g[m]=arguments[m];
-var p=Array.prototype.slice.call(1===g.length&&w(g[0])?g[0]:g);return new k(function(q,x){function fa(ha,C){try{if(C&&("object"===typeof C||"function"===typeof C)){var ia=C.then;if("function"===typeof ia){ia.call(C,function(U){fa(ha,U)},x);return}}p[ha]=C;0===--La&&q(p)}catch(U){x(U)}}if(0===p.length)return q([]);for(var La=p.length,O=0;O<p.length;O++)fa(O,p[O])})};k.resolve=function(g){return g&&"object"===typeof g&&g.constructor===k?g:new k(function(m){m(g)})};k.reject=function(g){return new k(function(m,
-p){p(g)})};k.race=function(g){return new k(function(m,p){for(var q=0;q<g.length;q++)g[q].then(m,p)})};return k},B=window.Promise?window.Promise:t(),ja=function(a){return Ga(a)},ka=tinymce.util.Tools.resolve("tinymce.util.Delay"),z=tinymce.util.Tools.resolve("tinymce.util.Promise"),V=tinymce.util.Tools.resolve("tinymce.util.URI"),G={getImageSize:function(a){var b=a.style.width;var c=a.style.height;if(b||c)return/^[0-9\.]+px$/.test(b)&&/^[0-9\.]+px$/.test(c)?{w:parseInt(b,10),h:parseInt(c,10)}:null;
-b=a.width;c=a.height;return b&&c?{w:parseInt(b,10),h:parseInt(c,10)}:null},setImageSize:function(a,b){if(b){var c=a.style.width;var d=a.style.height;if(c||d)a.style.width=b.w+"px",a.style.height=b.h+"px",a.removeAttribute("data-mce-style");c=a.width;d=a.height;if(c||d)a.setAttribute("width",b.w),a.setAttribute("height",b.h)}},getNaturalImageSize:function(a){return{w:a.naturalWidth,h:a.naturalHeight}}},P=function(a,b){for(var c=0,d=a.length;c<d;c++){var e=a[c];if(b(e,c))return y.some(e)}return y.none()};
-(function(a){return function(b){if(null===b)b="null";else{var c=typeof b;b="object"===c&&(Array.prototype.isPrototypeOf(b)||b.constructor&&"Array"===b.constructor.name)?"array":"object"===c&&(String.prototype.isPrototypeOf(b)||b.constructor&&"String"===b.constructor.name)?"string":c}return b===a}})("function")(Array.from);var E={traverse:function(a,b){a=b.reduce(function(c,d){return null!==c&&void 0!==c?c[d]:void 0},a);return null!==a&&void 0!==a?a:null},readBlob:function(a){return new z(function(b){var c=
-new n.FileReader;c.onload=function(d){b(d.target.result)};c.readAsText(a)})},requestUrlAsBlob:function(a,b,c){return new z(function(d){var e=new n.XMLHttpRequest;e.onreadystatechange=function(){4===e.readyState&&d({status:e.status,blob:this.response})};e.open("GET",a,!0);e.withCredentials=c;M.each(b,function(f,h){e.setRequestHeader(h,f)});e.responseType="blob";e.send()})},parseJson:function(a){try{var b=JSON.parse(a)}catch(c){}return b}},Ma=[{code:404,message:"Could not find Image Proxy"},{code:403,
-message:"Rejected request"},{code:0,message:"Incorrect Image Proxy URL"}],Na=[{type:"key_missing",message:"The request did not include an api key."},{type:"key_not_found",message:"The provided api key could not be found."},{type:"domain_not_trusted",message:"The api key is not valid for the request origins."}],la=function(a){return"ImageProxy HTTP error: "+P(Ma,function(b){return a===b.code}).fold(l("Unknown ImageProxy error"),function(b){return b.message})},ma=function(a){a=la(a);return z.reject(a)},
-na=function(a){return P(Na,function(b){return b.type===a}).fold(l("Unknown service error"),function(b){return b.message})},Oa=function(a,b){return E.readBlob(b).then(function(c){c=E.parseJson(c);c=E.traverse(c,["error","type"]);c="ImageProxy Service error: "+(c?na(c):"Invalid JSON in service error message");return z.reject(c)})},ea={handleServiceErrorResponse:function(a,b){return 400===a||403===a||500===a?Oa(a,b):ma(a)},handleHttpError:ma,getHttpErrorMsg:la,getServiceErrorMsg:na},Pa=function(a,b){var c=
--1===a.indexOf("?")?"?":"&";return/[?&]apiKey=/.test(a)||!b?a:a+c+"apiKey="+encodeURIComponent(b)},Qa=function(a,b){var c={"Content-Type":"application/json;charset=UTF-8","tiny-api-key":b};return E.requestUrlAsBlob(Pa(a,b),c,!1).then(function(d){return 200>d.status||300<=d.status?ea.handleServiceErrorResponse(d.status,d.blob):z.resolve(d.blob)})},oa=function(){return W(0,0)},W=function(a,b){return{major:a,minor:b}},Q={nu:W,detect:function(a,b){b=String(b).toLowerCase();if(0===a.length)a=oa();else{a:{for(var c=
-0;c<a.length;c++){var d=a[c];if(d.test(b)){a=d;break a}}a=void 0}a=a?W(Number(b.replace(a,"$1")),Number(b.replace(a,"$2"))):{major:0,minor:0}}return a},unknown:oa},D=function(a,b){return function(){return b===a}},pa=function(a){var b=a.current;return{current:b,version:a.version,isEdge:D("Edge",b),isChrome:D("Chrome",b),isIE:D("IE",b),isOpera:D("Opera",b),isFirefox:D("Firefox",b),isSafari:D("Safari",b)}},Ra=function(){return pa({current:void 0,version:Q.unknown()})};l("Edge");l("Chrome");l("IE");l("Opera");
-l("Firefox");l("Safari");var A=function(a,b){return function(){return b===a}},qa=function(a){var b=a.current;return{current:b,version:a.version,isWindows:A("Windows",b),isiOS:A("iOS",b),isAndroid:A("Android",b),isOSX:A("OSX",b),isLinux:A("Linux",b),isSolaris:A("Solaris",b),isFreeBSD:A("FreeBSD",b),isChromeOS:A("ChromeOS",b)}},Sa=function(){return qa({current:void 0,version:Q.unknown()})};l("Windows");l("iOS");l("Android");l("Linux");l("OSX");l("Solaris");l("FreeBSD");l("ChromeOS");var ra=function(a,
-b){var c=String(b).toLowerCase();return P(a,function(d){return d.search(c)})},sa={detectBrowser:function(a,b){return ra(a,b).map(function(c){var d=Q.detect(c.versionRegexes,b);return{current:c.name,version:d}})},detectOs:function(a,b){return ra(a,b).map(function(c){var d=Q.detect(c.versionRegexes,b);return{current:c.name,version:d}})}},v=function(a,b){return-1!==a.indexOf(b)},H=/.*?version\/ ?([0-9]+)\.([0-9]+).*/;t=function(a){return function(b){return v(b,a)}};H=[{name:"Edge",versionRegexes:[/.*?edge\/ ?([0-9]+)\.([0-9]+)$/],
-search:function(a){return v(a,"edge/")&&v(a,"chrome")&&v(a,"safari")&&v(a,"applewebkit")}},{name:"Chrome",versionRegexes:[/.*?chrome\/([0-9]+)\.([0-9]+).*/,H],search:function(a){return v(a,"chrome")&&!v(a,"chromeframe")}},{name:"IE",versionRegexes:[/.*?msie ?([0-9]+)\.([0-9]+).*/,/.*?rv:([0-9]+)\.([0-9]+).*/],search:function(a){return v(a,"msie")||v(a,"trident")}},{name:"Opera",versionRegexes:[H,/.*?opera\/([0-9]+)\.([0-9]+).*/],search:t("opera")},{name:"Firefox",versionRegexes:[/.*?firefox\/ ?([0-9]+)\.([0-9]+).*/],
-search:t("firefox")},{name:"Safari",versionRegexes:[H,/.*?cpu os ([0-9]+)_([0-9]+).*/],search:function(a){return(v(a,"safari")||v(a,"mobile/"))&&v(a,"applewebkit")}}];t=[{name:"Windows",search:t("win"),versionRegexes:[/.*?windows nt ?([0-9]+)\.([0-9]+).*/]},{name:"iOS",search:function(a){return v(a,"iphone")||v(a,"ipad")},versionRegexes:[/.*?version\/ ?([0-9]+)\.([0-9]+).*/,/.*cpu os ([0-9]+)_([0-9]+).*/,/.*cpu iphone os ([0-9]+)_([0-9]+).*/]},{name:"Android",search:t("android"),versionRegexes:[/.*?android ?([0-9]+)\.([0-9]+).*/]},
-{name:"OSX",search:t("mac os x"),versionRegexes:[/.*?mac os x ?([0-9]+)_([0-9]+).*/]},{name:"Linux",search:t("linux"),versionRegexes:[]},{name:"Solaris",search:t("sunos"),versionRegexes:[]},{name:"FreeBSD",search:t("freebsd"),versionRegexes:[]},{name:"ChromeOS",search:t("cros"),versionRegexes:[/.*?chrome\/([0-9]+)\.([0-9]+).*/]}];var ta={browsers:l(H),oses:l(t)};t=L(function(a,b){var c=ta.browsers(),d=ta.oses();c=sa.detectBrowser(c,a).fold(Ra,pa);d=sa.detectOs(d,a).fold(Sa,qa);var e=d.isiOS()&&!0===
-/ipad/i.test(a),f=d.isiOS()&&!e,h=d.isiOS()||d.isAndroid(),k=h||b("(pointer:coarse)");b=e||!f&&h&&b("(min-device-width:768px)");h=f||h&&!b;a=c.isSafari()&&d.isiOS()&&!1===/safari/i.test(a);var r=!h&&!b&&!a;a={isiPad:l(e),isiPhone:l(f),isTablet:l(b),isPhone:l(h),isTouch:l(k),isAndroid:d.isAndroid,isiOS:d.isiOS,isWebView:l(a),isDesktop:l(r)};return{browser:c,os:d,deviceType:a}}(n.navigator.userAgent,function(a){return n.window.matchMedia(a).matches}));var I=function(a){if(null===a||void 0===a)throw Error("Node cannot be null or undefined");
-return{dom:l(a)}},J={fromHtml:function(a,b){b=(b||n.document).createElement("div");b.innerHTML=a;if(!b.hasChildNodes()||1<b.childNodes.length)throw n.console.error("HTML does not have a single root node",a),Error("HTML must have a single root node");return I(b.childNodes[0])},fromTag:function(a,b){a=(b||n.document).createElement(a);return I(a)},fromText:function(a,b){a=(b||n.document).createTextNode(a);return I(a)},fromDom:I,fromPoint:function(a,b,c){a=a.dom();return y.from(a.elementFromPoint(b,c)).map(I)}},
-Ta=n.Node.ELEMENT_NODE,Ua=function(a,b){a=a.dom();if(a.nodeType!==Ta)return!1;if(void 0!==a.matches)return a.matches(b);if(void 0!==a.msMatchesSelector)return a.msMatchesSelector(b);if(void 0!==a.webkitMatchesSelector)return a.webkitMatchesSelector(b);if(void 0!==a.mozMatchesSelector)return a.mozMatchesSelector(b);throw Error("Browser lacks native selectors");};t.get().browser.isIE();"undefined"!==typeof n.window||Function("return this;")();var Va=function(a,b){return P(a.dom().childNodes,function(c){return b(J.fromDom(c))}).map(J.fromDom)},
-ua=function(a,b){return Va(a,function(c){return Ua(c,b)})},Wa=0,X=function(a){var b=a.selection.getNode();return a.dom.is(b,"figure")?ua(J.fromDom(b),"img"):y.some(J.fromDom(b))},Xa=function(a,b){return(b=b.match(/\/([^\/\?]+)?\.(?:jpeg|jpg|png|gif)(?:\?|$)/i))?a.dom.encode(b[1]):null},va=function(a,b){b=b.src;return 0===b.indexOf("data:")||0===b.indexOf("blob:")||(new V(b)).host===a.documentBaseURI.host},wa=function(a,b){return-1!==M.inArray(a.getParam("imagetools_cors_hosts",[],"string[]"),(new V(b.src)).host)},
-Ya=function(a,b){return y.from(a.getParam("imagetools_fetch_image",null,"function")).fold(function(){var c=b.src;if(wa(a,b)){var d=b.src;c=-1!==M.inArray(a.getParam("imagetools_credentials_hosts",[],"string[]"),(new V(b.src)).host);d=da(d,c)}else va(a,b)?(d=b.src,d=0===d.indexOf("data:")?Z(d):Ca(d)):(c+=(-1===c.indexOf("?")?"?":"&")+"url="+encodeURIComponent(b.src),d=(d=a.getParam("api_key",a.getParam("imagetools_api_key","","string"),"string"))?Qa(c,d):da(c,!1));return d},function(c){return c(b)})},
-xa=function(a,b){var c;return(c=a.editorUpload.blobCache.getByUri(b.src))?z.resolve(c.blob()):Ya(a,b)},Za=function(a,b){var c=ka.setEditorTimeout(a,function(){a.editorUpload.uploadImagesAuto()},a.getParam("images_upload_timeout",3E4,"number"));b.set(c)},ya=function(a){ka.clearTimeout(a.get())},za=function(a,b,c,d,e,f){return b.toBlob().then(function(h){var k;var r=a.editorUpload.blobCache;var w=e.src;if(a.getParam("images_reuse_filename",!1,"boolean"))if(k=r.getByUri(w)){w=k.uri();var g=k.name()}else g=
-Xa(a,w);k=r.create({id:"imagetools"+Wa++,blob:h,base64:b.toBase64(),uri:w,name:g});r.add(k);a.undoManager.transact(function(){function m(){a.$(e).off("load",m);a.nodeChanged();c?a.editorUpload.uploadImagesAuto():(ya(d),Za(a,d))}a.$(e).on("load",m);f&&a.$(e).attr({width:f.w,height:f.h});a.$(e).attr({src:k.blobUri()}).removeAttr("data-mce-src")});return k})},Aa=function(a,b,c,d){return function(){return X(a).fold(function(){a.notificationManager.open({text:"Could not find selected image",type:"error"})},
-function(e){return a._scanForImages().then(function(){return xa(a,e.dom())}).then(ja).then(c).then(function(f){return za(a,f,!1,b,e.dom(),d)},function(f){a.notificationManager.open({text:f,type:"error"})})})}},u={rotate:function(a,b,c){return function(){var d=X(a).fold(function(){return null},function(e){return(e=G.getImageSize(e.dom()))?{w:e.h,h:e.w}:null});return Aa(a,b,function(e){return Ha(e,c)},d)()}},flip:function(a,b,c){return function(){return Aa(a,b,function(d){return Ia(d,c)})()}},getEditableImage:function(a,
-b){var c=function(d){return a.dom.is(d,"img:not([data-mce-object],[data-mce-placeholder])")&&(va(a,d)||wa(a,d)||a.settings.imagetools_proxy|1)};return a.dom.is(b,"figure")?ua(J.fromDom(b),"img").map(function(d){return c(d.dom())?y.some(d.dom()):y.none()}):c(b)?y.some(b):y.none()},cancelTimedUpload:ya,findBlob:xa,getSelectedImage:X,handleDialogBlob:function(a,b,c,d,e){return new z(function(f){Y(e).then(function(h){var k=G.getNaturalImageSize(h);(d.w!==k.w||d.h!==k.h)&&G.getImageSize(c)&&G.setImageSize(c,
-k);n.URL.revokeObjectURL(h.src);return e}).then(ja).then(function(h){return za(a,h,!0,b,c)},function(){})})}},$a=l("save-state"),ab=l("disable"),bb=l("enable"),cb={makeOpen:function(a,b){return function(){var c=function(f){return{title:"Edit Image",size:"large",body:{type:"panel",items:[{type:"imagetools",name:"imagetools",label:"Edit Image",currentState:f}]},buttons:[{type:"cancel",name:"cancel",text:"Cancel"},{type:"submit",name:"save",text:"Save",primary:!0,disabled:!0}],onSubmit:function(h){var k=
-h.getData().imagetools.blob;d.each(function(r){e.each(function(w){u.handleDialogBlob(a,b,r.dom(),w,k)})});h.close()},onCancel:function(){},onAction:function(h,k){switch(k.name){case $a():k.value?h.enable("save"):h.disable("save");break;case ab():h.disable("save");h.disable("cancel");break;case bb():h.enable("cancel")}}}},d=u.getSelectedImage(a),e=d.map(function(f){return G.getNaturalImageSize(f.dom())});u.getSelectedImage(a).each(function(f){u.getEditableImage(a,f.dom()).each(function(h){u.findBlob(a,
-f.dom()).then(function(k){k={blob:k,url:n.URL.createObjectURL(k)};a.windowManager.open(c(k))})})})}}},db={register:function(a,b){M.each({mceImageRotateLeft:u.rotate(a,b,-90),mceImageRotateRight:u.rotate(a,b,90),mceImageFlipVertical:u.flip(a,b,"v"),mceImageFlipHorizontal:u.flip(a,b,"h"),mceEditImage:cb.makeOpen(a,b)},function(c,d){a.addCommand(d,c)})}},eb={setup:function(a,b,c){a.on("NodeChange",function(d){var e=c.get();e&&e.src!==d.element.src&&(u.cancelTimedUpload(b),a.editorUpload.uploadImagesAuto(),
-c.set(null));u.getEditableImage(a,d.element).each(c.set)})}},fb={register:function(a){var b=function(c){return function(){return a.execCommand(c)}};a.ui.registry.addButton("rotateleft",{tooltip:"Rotate counterclockwise",icon:"rotate-left",onAction:b("mceImageRotateLeft")});a.ui.registry.addButton("rotateright",{tooltip:"Rotate clockwise",icon:"rotate-right",onAction:b("mceImageRotateRight")});a.ui.registry.addButton("flipv",{tooltip:"Flip vertically",icon:"flip-vertically",onAction:b("mceImageFlipVertical")});
-a.ui.registry.addButton("fliph",{tooltip:"Flip horizontally",icon:"flip-horizontally",onAction:b("mceImageFlipHorizontal")});a.ui.registry.addButton("editimage",{tooltip:"Edit image",icon:"edit-image",onAction:b("mceEditImage"),onSetup:function(c){var d=function(){u.getSelectedImage(a).each(function(e){e=u.getEditableImage(a,e.dom()).isNone();c.setDisabled(e)})};a.on("NodeChange",d);return function(){a.off("NodeChange",d)}}});a.ui.registry.addButton("imageoptions",{tooltip:"Image options",icon:"image-options",
-onAction:b("mceImage")});a.ui.registry.addContextMenu("imagetools",{update:function(c){return u.getEditableImage(a,c).fold(function(){return[]},function(d){return[{text:"Edit image",icon:"edit-image",onAction:b("mceEditImage")}]})}})}},gb={register:function(a){a.ui.registry.addContextToolbar("imagetools",{items:a.getParam("imagetools_toolbar","alignleft aligncenter alignright rotateleft rotateright flipv fliph editimage imageoptions"),predicate:function(b){return u.getEditableImage(a,b).isSome()},
-position:"node",scope:"node"})}};(function(){Ja.add("imagetools",function(a){var b=L(0),c=L(null);db.register(a,b);fb.register(a);gb.register(a);eb.setup(a,b,c)})})()})(window);
+  * Copyright (c) Tiny Technologies, Inc. All rights reserved.
+  * Licensed under the LGPL or a commercial license.
+  * For LGPL see License.txt in the project root for license information.
+  * For commercial licenses see https://www.tiny.cloud/
+  *
+  * Version: 5.7.0 (2021-02-10)
+  */
+ (function () {
+  'use strict';
+
+  var Cell = function (initial) {
+    var value = initial;
+    var get = function () {
+      return value;
+    };
+    var set = function (v) {
+      value = v;
+    };
+    return {
+      get: get,
+      set: set
+    };
+  };
+
+  var global = tinymce.util.Tools.resolve('tinymce.PluginManager');
+
+  var global$1 = tinymce.util.Tools.resolve('tinymce.util.Tools');
+
+  var noop = function () {
+  };
+  var constant = function (value) {
+    return function () {
+      return value;
+    };
+  };
+  var never = constant(false);
+  var always = constant(true);
+
+  var none = function () {
+    return NONE;
+  };
+  var NONE = function () {
+    var eq = function (o) {
+      return o.isNone();
+    };
+    var call = function (thunk) {
+      return thunk();
+    };
+    var id = function (n) {
+      return n;
+    };
+    var me = {
+      fold: function (n, _s) {
+        return n();
+      },
+      is: never,
+      isSome: never,
+      isNone: always,
+      getOr: id,
+      getOrThunk: call,
+      getOrDie: function (msg) {
+        throw new Error(msg || 'error: getOrDie called on none.');
+      },
+      getOrNull: constant(null),
+      getOrUndefined: constant(undefined),
+      or: id,
+      orThunk: call,
+      map: none,
+      each: noop,
+      bind: none,
+      exists: never,
+      forall: always,
+      filter: none,
+      equals: eq,
+      equals_: eq,
+      toArray: function () {
+        return [];
+      },
+      toString: constant('none()')
+    };
+    return me;
+  }();
+  var some = function (a) {
+    var constant_a = constant(a);
+    var self = function () {
+      return me;
+    };
+    var bind = function (f) {
+      return f(a);
+    };
+    var me = {
+      fold: function (n, s) {
+        return s(a);
+      },
+      is: function (v) {
+        return a === v;
+      },
+      isSome: always,
+      isNone: never,
+      getOr: constant_a,
+      getOrThunk: constant_a,
+      getOrDie: constant_a,
+      getOrNull: constant_a,
+      getOrUndefined: constant_a,
+      or: self,
+      orThunk: self,
+      map: function (f) {
+        return some(f(a));
+      },
+      each: function (f) {
+        f(a);
+      },
+      bind: bind,
+      exists: bind,
+      forall: bind,
+      filter: function (f) {
+        return f(a) ? me : NONE;
+      },
+      toArray: function () {
+        return [a];
+      },
+      toString: function () {
+        return 'some(' + a + ')';
+      },
+      equals: function (o) {
+        return o.is(a);
+      },
+      equals_: function (o, elementEq) {
+        return o.fold(never, function (b) {
+          return elementEq(a, b);
+        });
+      }
+    };
+    return me;
+  };
+  var from = function (value) {
+    return value === null || value === undefined ? NONE : some(value);
+  };
+  var Optional = {
+    some: some,
+    none: none,
+    from: from
+  };
+
+  var isSimpleType = function (type) {
+    return function (value) {
+      return typeof value === type;
+    };
+  };
+  var isNullable = function (a) {
+    return a === null || a === undefined;
+  };
+  var isNonNullable = function (a) {
+    return !isNullable(a);
+  };
+  var isFunction = isSimpleType('function');
+
+  var create = function (width, height) {
+    return resize(document.createElement('canvas'), width, height);
+  };
+  var clone = function (canvas) {
+    var tCanvas = create(canvas.width, canvas.height);
+    var ctx = get2dContext(tCanvas);
+    ctx.drawImage(canvas, 0, 0);
+    return tCanvas;
+  };
+  var get2dContext = function (canvas) {
+    return canvas.getContext('2d');
+  };
+  var resize = function (canvas, width, height) {
+    canvas.width = width;
+    canvas.height = height;
+    return canvas;
+  };
+
+  var getWidth = function (image) {
+    return image.naturalWidth || image.width;
+  };
+  var getHeight = function (image) {
+    return image.naturalHeight || image.height;
+  };
+
+  var promise = function () {
+    var Promise = function (fn) {
+      if (typeof this !== 'object') {
+        throw new TypeError('Promises must be constructed via new');
+      }
+      if (typeof fn !== 'function') {
+        throw new TypeError('not a function');
+      }
+      this._state = null;
+      this._value = null;
+      this._deferreds = [];
+      doResolve(fn, bind(resolve, this), bind(reject, this));
+    };
+    var anyWindow = window;
+    var asap = Promise.immediateFn || typeof anyWindow.setImmediate === 'function' && anyWindow.setImmediate || function (fn) {
+      return setTimeout(fn, 1);
+    };
+    var bind = function (fn, thisArg) {
+      return function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+          args[_i] = arguments[_i];
+        }
+        return fn.apply(thisArg, args);
+      };
+    };
+    var isArray = Array.isArray || function (value) {
+      return Object.prototype.toString.call(value) === '[object Array]';
+    };
+    function handle(deferred) {
+      var me = this;
+      if (this._state === null) {
+        this._deferreds.push(deferred);
+        return;
+      }
+      asap(function () {
+        var cb = me._state ? deferred.onFulfilled : deferred.onRejected;
+        if (cb === null) {
+          (me._state ? deferred.resolve : deferred.reject)(me._value);
+          return;
+        }
+        var ret;
+        try {
+          ret = cb(me._value);
+        } catch (e) {
+          deferred.reject(e);
+          return;
+        }
+        deferred.resolve(ret);
+      });
+    }
+    function resolve(newValue) {
+      try {
+        if (newValue === this) {
+          throw new TypeError('A promise cannot be resolved with itself.');
+        }
+        if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
+          var then = newValue.then;
+          if (typeof then === 'function') {
+            doResolve(bind(then, newValue), bind(resolve, this), bind(reject, this));
+            return;
+          }
+        }
+        this._state = true;
+        this._value = newValue;
+        finale.call(this);
+      } catch (e) {
+        reject.call(this, e);
+      }
+    }
+    function reject(newValue) {
+      this._state = false;
+      this._value = newValue;
+      finale.call(this);
+    }
+    function finale() {
+      for (var _i = 0, _a = this._deferreds; _i < _a.length; _i++) {
+        var deferred = _a[_i];
+        handle.call(this, deferred);
+      }
+      this._deferreds = [];
+    }
+    function Handler(onFulfilled, onRejected, resolve, reject) {
+      this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
+      this.onRejected = typeof onRejected === 'function' ? onRejected : null;
+      this.resolve = resolve;
+      this.reject = reject;
+    }
+    var doResolve = function (fn, onFulfilled, onRejected) {
+      var done = false;
+      try {
+        fn(function (value) {
+          if (done) {
+            return;
+          }
+          done = true;
+          onFulfilled(value);
+        }, function (reason) {
+          if (done) {
+            return;
+          }
+          done = true;
+          onRejected(reason);
+        });
+      } catch (ex) {
+        if (done) {
+          return;
+        }
+        done = true;
+        onRejected(ex);
+      }
+    };
+    Promise.prototype.catch = function (onRejected) {
+      return this.then(null, onRejected);
+    };
+    Promise.prototype.then = function (onFulfilled, onRejected) {
+      var me = this;
+      return new Promise(function (resolve, reject) {
+        handle.call(me, new Handler(onFulfilled, onRejected, resolve, reject));
+      });
+    };
+    Promise.all = function () {
+      var values = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        values[_i] = arguments[_i];
+      }
+      var args = Array.prototype.slice.call(values.length === 1 && isArray(values[0]) ? values[0] : values);
+      return new Promise(function (resolve, reject) {
+        if (args.length === 0) {
+          return resolve([]);
+        }
+        var remaining = args.length;
+        var res = function (i, val) {
+          try {
+            if (val && (typeof val === 'object' || typeof val === 'function')) {
+              var then = val.then;
+              if (typeof then === 'function') {
+                then.call(val, function (val) {
+                  res(i, val);
+                }, reject);
+                return;
+              }
+            }
+            args[i] = val;
+            if (--remaining === 0) {
+              resolve(args);
+            }
+          } catch (ex) {
+            reject(ex);
+          }
+        };
+        for (var i = 0; i < args.length; i++) {
+          res(i, args[i]);
+        }
+      });
+    };
+    Promise.resolve = function (value) {
+      if (value && typeof value === 'object' && value.constructor === Promise) {
+        return value;
+      }
+      return new Promise(function (resolve) {
+        resolve(value);
+      });
+    };
+    Promise.reject = function (reason) {
+      return new Promise(function (resolve, reject) {
+        reject(reason);
+      });
+    };
+    Promise.race = function (values) {
+      return new Promise(function (resolve, reject) {
+        for (var _i = 0, values_1 = values; _i < values_1.length; _i++) {
+          var value = values_1[_i];
+          value.then(resolve, reject);
+        }
+      });
+    };
+    return Promise;
+  };
+  var Promise = window.Promise ? window.Promise : promise();
+
+  var imageToBlob = function (image) {
+    var src = image.src;
+    if (src.indexOf('data:') === 0) {
+      return dataUriToBlob(src);
+    }
+    return anyUriToBlob(src);
+  };
+  var blobToImage = function (blob) {
+    return new Promise(function (resolve, reject) {
+      var blobUrl = URL.createObjectURL(blob);
+      var image = new Image();
+      var removeListeners = function () {
+        image.removeEventListener('load', loaded);
+        image.removeEventListener('error', error);
+      };
+      var loaded = function () {
+        removeListeners();
+        resolve(image);
+      };
+      var error = function () {
+        removeListeners();
+        reject('Unable to load data of type ' + blob.type + ': ' + blobUrl);
+      };
+      image.addEventListener('load', loaded);
+      image.addEventListener('error', error);
+      image.src = blobUrl;
+      if (image.complete) {
+        setTimeout(loaded, 0);
+      }
+    });
+  };
+  var anyUriToBlob = function (url) {
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'blob';
+      xhr.onload = function () {
+        if (this.status === 200) {
+          resolve(this.response);
+        }
+      };
+      xhr.onerror = function () {
+        var _this = this;
+        var corsError = function () {
+          var obj = new Error('No access to download image');
+          obj.code = 18;
+          obj.name = 'SecurityError';
+          return obj;
+        };
+        var genericError = function () {
+          return new Error('Error ' + _this.status + ' downloading image');
+        };
+        reject(this.status === 0 ? corsError() : genericError());
+      };
+      xhr.send();
+    });
+  };
+  var dataUriToBlobSync = function (uri) {
+    var data = uri.split(',');
+    var matches = /data:([^;]+)/.exec(data[0]);
+    if (!matches) {
+      return Optional.none();
+    }
+    var mimetype = matches[1];
+    var base64 = data[1];
+    var sliceSize = 1024;
+    var byteCharacters = atob(base64);
+    var bytesLength = byteCharacters.length;
+    var slicesCount = Math.ceil(bytesLength / sliceSize);
+    var byteArrays = new Array(slicesCount);
+    for (var sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
+      var begin = sliceIndex * sliceSize;
+      var end = Math.min(begin + sliceSize, bytesLength);
+      var bytes = new Array(end - begin);
+      for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
+        bytes[i] = byteCharacters[offset].charCodeAt(0);
+      }
+      byteArrays[sliceIndex] = new Uint8Array(bytes);
+    }
+    return Optional.some(new Blob(byteArrays, { type: mimetype }));
+  };
+  var dataUriToBlob = function (uri) {
+    return new Promise(function (resolve, reject) {
+      dataUriToBlobSync(uri).fold(function () {
+        reject('uri is not base64: ' + uri);
+      }, resolve);
+    });
+  };
+  var canvasToBlob = function (canvas, type, quality) {
+    type = type || 'image/png';
+    if (isFunction(HTMLCanvasElement.prototype.toBlob)) {
+      return new Promise(function (resolve, reject) {
+        canvas.toBlob(function (blob) {
+          if (blob) {
+            resolve(blob);
+          } else {
+            reject();
+          }
+        }, type, quality);
+      });
+    } else {
+      return dataUriToBlob(canvas.toDataURL(type, quality));
+    }
+  };
+  var canvasToDataURL = function (canvas, type, quality) {
+    type = type || 'image/png';
+    return canvas.toDataURL(type, quality);
+  };
+  var blobToCanvas = function (blob) {
+    return blobToImage(blob).then(function (image) {
+      revokeImageUrl(image);
+      var canvas = create(getWidth(image), getHeight(image));
+      var context = get2dContext(canvas);
+      context.drawImage(image, 0, 0);
+      return canvas;
+    });
+  };
+  var blobToDataUri = function (blob) {
+    return new Promise(function (resolve) {
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        resolve(reader.result);
+      };
+      reader.readAsDataURL(blob);
+    });
+  };
+  var revokeImageUrl = function (image) {
+    URL.revokeObjectURL(image.src);
+  };
+
+  var blobToImage$1 = function (blob) {
+    return blobToImage(blob);
+  };
+  var imageToBlob$1 = function (image) {
+    return imageToBlob(image);
+  };
+
+  var each = function (xs, f) {
+    for (var i = 0, len = xs.length; i < len; i++) {
+      var x = xs[i];
+      f(x, i);
+    }
+  };
+  var foldl = function (xs, f, acc) {
+    each(xs, function (x) {
+      acc = f(acc, x);
+    });
+    return acc;
+  };
+  var findUntil = function (xs, pred, until) {
+    for (var i = 0, len = xs.length; i < len; i++) {
+      var x = xs[i];
+      if (pred(x, i)) {
+        return Optional.some(x);
+      } else if (until(x, i)) {
+        break;
+      }
+    }
+    return Optional.none();
+  };
+  var find = function (xs, pred) {
+    return findUntil(xs, pred, never);
+  };
+
+  var create$1 = function (getCanvas, blob, uri) {
+    var initialType = blob.type;
+    var getType = constant(initialType);
+    var toBlob = function () {
+      return Promise.resolve(blob);
+    };
+    var toDataURL = constant(uri);
+    var toBase64 = function () {
+      return uri.split(',')[1];
+    };
+    var toAdjustedBlob = function (type, quality) {
+      return getCanvas.then(function (canvas) {
+        return canvasToBlob(canvas, type, quality);
+      });
+    };
+    var toAdjustedDataURL = function (type, quality) {
+      return getCanvas.then(function (canvas) {
+        return canvasToDataURL(canvas, type, quality);
+      });
+    };
+    var toAdjustedBase64 = function (type, quality) {
+      return toAdjustedDataURL(type, quality).then(function (dataurl) {
+        return dataurl.split(',')[1];
+      });
+    };
+    var toCanvas = function () {
+      return getCanvas.then(clone);
+    };
+    return {
+      getType: getType,
+      toBlob: toBlob,
+      toDataURL: toDataURL,
+      toBase64: toBase64,
+      toAdjustedBlob: toAdjustedBlob,
+      toAdjustedDataURL: toAdjustedDataURL,
+      toAdjustedBase64: toAdjustedBase64,
+      toCanvas: toCanvas
+    };
+  };
+  var fromBlob = function (blob) {
+    return blobToDataUri(blob).then(function (uri) {
+      return create$1(blobToCanvas(blob), blob, uri);
+    });
+  };
+  var fromCanvas = function (canvas, type) {
+    return canvasToBlob(canvas, type).then(function (blob) {
+      return create$1(Promise.resolve(canvas), blob, canvas.toDataURL());
+    });
+  };
+
+  var rotate = function (ir, angle) {
+    return ir.toCanvas().then(function (canvas) {
+      return applyRotate(canvas, ir.getType(), angle);
+    });
+  };
+  var applyRotate = function (image, type, angle) {
+    var canvas = create(image.width, image.height);
+    var context = get2dContext(canvas);
+    var translateX = 0;
+    var translateY = 0;
+    angle = angle < 0 ? 360 + angle : angle;
+    if (angle === 90 || angle === 270) {
+      resize(canvas, canvas.height, canvas.width);
+    }
+    if (angle === 90 || angle === 180) {
+      translateX = canvas.width;
+    }
+    if (angle === 270 || angle === 180) {
+      translateY = canvas.height;
+    }
+    context.translate(translateX, translateY);
+    context.rotate(angle * Math.PI / 180);
+    context.drawImage(image, 0, 0);
+    return fromCanvas(canvas, type);
+  };
+  var flip = function (ir, axis) {
+    return ir.toCanvas().then(function (canvas) {
+      return applyFlip(canvas, ir.getType(), axis);
+    });
+  };
+  var applyFlip = function (image, type, axis) {
+    var canvas = create(image.width, image.height);
+    var context = get2dContext(canvas);
+    if (axis === 'v') {
+      context.scale(1, -1);
+      context.drawImage(image, 0, -canvas.height);
+    } else {
+      context.scale(-1, 1);
+      context.drawImage(image, -canvas.width, 0);
+    }
+    return fromCanvas(canvas, type);
+  };
+
+  var flip$1 = function (ir, axis) {
+    return flip(ir, axis);
+  };
+  var rotate$1 = function (ir, angle) {
+    return rotate(ir, angle);
+  };
+
+  var keys = Object.keys;
+  var each$1 = function (obj, f) {
+    var props = keys(obj);
+    for (var k = 0, len = props.length; k < len; k++) {
+      var i = props[k];
+      var x = obj[i];
+      f(x, i);
+    }
+  };
+
+  var sendRequest = function (url, headers, withCredentials) {
+    if (withCredentials === void 0) {
+      withCredentials = false;
+    }
+    return new Promise(function (resolve) {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          resolve({
+            status: xhr.status,
+            blob: xhr.response
+          });
+        }
+      };
+      xhr.open('GET', url, true);
+      xhr.withCredentials = withCredentials;
+      each$1(headers, function (value, key) {
+        xhr.setRequestHeader(key, value);
+      });
+      xhr.responseType = 'blob';
+      xhr.send();
+    });
+  };
+  var readBlobText = function (blob) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        resolve(reader.result);
+      };
+      reader.onerror = function (e) {
+        reject(e);
+      };
+      reader.readAsText(blob);
+    });
+  };
+  var parseJson = function (text) {
+    try {
+      return Optional.some(JSON.parse(text));
+    } catch (ex) {
+      return Optional.none();
+    }
+  };
+
+  var friendlyHttpErrors = [
+    {
+      code: 404,
+      message: 'Could not find Image Proxy'
+    },
+    {
+      code: 403,
+      message: 'Rejected request'
+    },
+    {
+      code: 0,
+      message: 'Incorrect Image Proxy URL'
+    }
+  ];
+  var friendlyServiceErrors = [
+    {
+      type: 'not_found',
+      message: 'Failed to load image.'
+    },
+    {
+      type: 'key_missing',
+      message: 'The request did not include an api key.'
+    },
+    {
+      type: 'key_not_found',
+      message: 'The provided api key could not be found.'
+    },
+    {
+      type: 'domain_not_trusted',
+      message: 'The api key is not valid for the request origins.'
+    }
+  ];
+  var traverseJson = function (json, path) {
+    var value = foldl(path, function (result, key) {
+      return isNonNullable(result) ? result[key] : undefined;
+    }, json);
+    return Optional.from(value);
+  };
+  var isServiceErrorCode = function (code, blob) {
+    return (blob === null || blob === void 0 ? void 0 : blob.type) === 'application/json' && (code === 400 || code === 403 || code === 404 || code === 500);
+  };
+  var getHttpErrorMsg = function (status) {
+    var message = find(friendlyHttpErrors, function (error) {
+      return status === error.code;
+    }).fold(constant('Unknown ImageProxy error'), function (error) {
+      return error.message;
+    });
+    return 'ImageProxy HTTP error: ' + message;
+  };
+  var handleHttpError = function (status) {
+    var message = getHttpErrorMsg(status);
+    return Promise.reject(message);
+  };
+  var getServiceErrorMsg = function (type) {
+    return find(friendlyServiceErrors, function (error) {
+      return error.type === type;
+    }).fold(constant('Unknown service error'), function (error) {
+      return error.message;
+    });
+  };
+  var getServiceError = function (text) {
+    var serviceError = parseJson(text);
+    var errorMsg = serviceError.bind(function (err) {
+      return traverseJson(err, [
+        'error',
+        'type'
+      ]).map(getServiceErrorMsg);
+    }).getOr('Invalid JSON in service error message');
+    return 'ImageProxy Service error: ' + errorMsg;
+  };
+  var handleServiceError = function (blob) {
+    return readBlobText(blob).then(function (text) {
+      var serviceError = getServiceError(text);
+      return Promise.reject(serviceError);
+    });
+  };
+  var handleServiceErrorResponse = function (status, blob) {
+    return isServiceErrorCode(status, blob) ? handleServiceError(blob) : handleHttpError(status);
+  };
+
+  var appendApiKey = function (url, apiKey) {
+    var separator = url.indexOf('?') === -1 ? '?' : '&';
+    if (/[?&]apiKey=/.test(url)) {
+      return url;
+    } else {
+      return url + separator + 'apiKey=' + encodeURIComponent(apiKey);
+    }
+  };
+  var isError = function (status) {
+    return status < 200 || status >= 300;
+  };
+  var requestServiceBlob = function (url, apiKey) {
+    var headers = {
+      'Content-Type': 'application/json;charset=UTF-8',
+      'tiny-api-key': apiKey
+    };
+    return sendRequest(appendApiKey(url, apiKey), headers).then(function (result) {
+      return isError(result.status) ? handleServiceErrorResponse(result.status, result.blob) : Promise.resolve(result.blob);
+    });
+  };
+  var requestBlob = function (url, withCredentials) {
+    return sendRequest(url, {}, withCredentials).then(function (result) {
+      return isError(result.status) ? handleHttpError(result.status) : Promise.resolve(result.blob);
+    });
+  };
+  var getUrl = function (url, apiKey, withCredentials) {
+    if (withCredentials === void 0) {
+      withCredentials = false;
+    }
+    return apiKey ? requestServiceBlob(url, apiKey) : requestBlob(url, withCredentials);
+  };
+
+  var blobToImageResult = function (blob) {
+    return fromBlob(blob);
+  };
+
+  var ELEMENT = 1;
+
+  var fromHtml = function (html, scope) {
+    var doc = scope || document;
+    var div = doc.createElement('div');
+    div.innerHTML = html;
+    if (!div.hasChildNodes() || div.childNodes.length > 1) {
+      console.error('HTML does not have a single root node', html);
+      throw new Error('HTML must have a single root node');
+    }
+    return fromDom(div.childNodes[0]);
+  };
+  var fromTag = function (tag, scope) {
+    var doc = scope || document;
+    var node = doc.createElement(tag);
+    return fromDom(node);
+  };
+  var fromText = function (text, scope) {
+    var doc = scope || document;
+    var node = doc.createTextNode(text);
+    return fromDom(node);
+  };
+  var fromDom = function (node) {
+    if (node === null || node === undefined) {
+      throw new Error('Node cannot be null or undefined');
+    }
+    return { dom: node };
+  };
+  var fromPoint = function (docElm, x, y) {
+    return Optional.from(docElm.dom.elementFromPoint(x, y)).map(fromDom);
+  };
+  var SugarElement = {
+    fromHtml: fromHtml,
+    fromTag: fromTag,
+    fromText: fromText,
+    fromDom: fromDom,
+    fromPoint: fromPoint
+  };
+
+  var is = function (element, selector) {
+    var dom = element.dom;
+    if (dom.nodeType !== ELEMENT) {
+      return false;
+    } else {
+      var elem = dom;
+      if (elem.matches !== undefined) {
+        return elem.matches(selector);
+      } else if (elem.msMatchesSelector !== undefined) {
+        return elem.msMatchesSelector(selector);
+      } else if (elem.webkitMatchesSelector !== undefined) {
+        return elem.webkitMatchesSelector(selector);
+      } else if (elem.mozMatchesSelector !== undefined) {
+        return elem.mozMatchesSelector(selector);
+      } else {
+        throw new Error('Browser lacks native selectors');
+      }
+    }
+  };
+
+  var Global = typeof window !== 'undefined' ? window : Function('return this;')();
+
+  var child = function (scope, predicate) {
+    var pred = function (node) {
+      return predicate(SugarElement.fromDom(node));
+    };
+    var result = find(scope.dom.childNodes, pred);
+    return result.map(SugarElement.fromDom);
+  };
+
+  var child$1 = function (scope, selector) {
+    return child(scope, function (e) {
+      return is(e, selector);
+    });
+  };
+
+  var global$2 = tinymce.util.Tools.resolve('tinymce.util.Delay');
+
+  var global$3 = tinymce.util.Tools.resolve('tinymce.util.Promise');
+
+  var global$4 = tinymce.util.Tools.resolve('tinymce.util.URI');
+
+  var getToolbarItems = function (editor) {
+    return editor.getParam('imagetools_toolbar', 'rotateleft rotateright flipv fliph editimage imageoptions');
+  };
+  var getProxyUrl = function (editor) {
+    return editor.getParam('imagetools_proxy');
+  };
+  var isEditorAll = function (editor) {
+    return editor.getParam('imagetools_isEditorAll',true, 'boolean');
+  };
+  var getCorsHosts = function (editor) {
+    return editor.getParam('imagetools_cors_hosts', [], 'string[]');
+  };
+  var getCredentialsHosts = function (editor) {
+    return editor.getParam('imagetools_credentials_hosts', [], 'string[]');
+  };
+  var getFetchImage = function (editor) {
+    return Optional.from(editor.getParam('imagetools_fetch_image', null, 'function'));
+  };
+  var getApiKey = function (editor) {
+    return editor.getParam('api_key', editor.getParam('imagetools_api_key', '', 'string'), 'string');
+  };
+  var getUploadTimeout = function (editor) {
+    return editor.getParam('images_upload_timeout', 30000, 'number');
+  };
+  var shouldReuseFilename = function (editor) {
+    return editor.getParam('images_reuse_filename', false, 'boolean');
+  };
+
+  var getImageSize = function (img) {
+    var width, height;
+    var isPxValue = function (value) {
+      return /^[0-9\.]+px$/.test(value);
+    };
+    width = img.style.width;
+    height = img.style.height;
+    if (width || height) {
+      if (isPxValue(width) && isPxValue(height)) {
+        return {
+          w: parseInt(width, 10),
+          h: parseInt(height, 10)
+        };
+      }
+      return null;
+    }
+    width = img.width;
+    height = img.height;
+    if (width && height) {
+      return {
+        w: parseInt(width, 10),
+        h: parseInt(height, 10)
+      };
+    }
+    return null;
+  };
+  var setImageSize = function (img, size) {
+    var width, height;
+    if (size) {
+      width = img.style.width;
+      height = img.style.height;
+      if (width || height) {
+        img.style.width = size.w + 'px';
+        img.style.height = size.h + 'px';
+        img.removeAttribute('data-mce-style');
+      }
+      width = img.width;
+      height = img.height;
+      if (width || height) {
+        img.setAttribute('width', String(size.w));
+        img.setAttribute('height', String(size.h));
+      }
+    }
+  };
+  var getNaturalImageSize = function (img) {
+    return {
+      w: img.naturalWidth,
+      h: img.naturalHeight
+    };
+  };
+
+  var count = 0;
+  var getFigureImg = function (elem) {
+    return child$1(SugarElement.fromDom(elem), 'img');
+  };
+  var isFigure = function (editor, elem) {
+    return editor.dom.is(elem, 'figure');
+  };
+  var isImage = function (editor, imgNode) {
+    return editor.dom.is(imgNode, 'img:not([data-mce-object],[data-mce-placeholder])');
+  };
+  var getEditableImage = function (editor, node) {
+    var isEditable = function (imgNode) {
+      return isImage(editor, imgNode) && (isLocalImage(editor, imgNode) || isCorsImage(editor, imgNode) || isNonNullable(getProxyUrl(editor)||isEditorAll(editor)));
+    };
+    if (isFigure(editor, node)) {
+      return getFigureImg(node).bind(function (img) {
+        return isEditable(img.dom) ? Optional.some(img.dom) : Optional.none();
+      });
+    } else {
+      return isEditable(node) ? Optional.some(node) : Optional.none();
+    }
+  };
+  var displayError = function (editor, error) {
+    editor.notificationManager.open({
+      text: error,
+      type: 'error'
+    });
+  };
+  var getSelectedImage = function (editor) {
+    var elem = editor.selection.getNode();
+    var figureElm = editor.dom.getParent(elem, 'figure.image');
+    if (figureElm !== null && isFigure(editor, figureElm)) {
+      return getFigureImg(figureElm);
+    } else if (isImage(editor, elem)) {
+      return Optional.some(SugarElement.fromDom(elem));
+    } else {
+      return Optional.none();
+    }
+  };
+  var extractFilename = function (editor, url, group) {
+    var m = url.match(/(?:\/|^)(([^\/\?]+)\.(?:[a-z0-9.]+))(?:\?|$)/i);
+    return isNonNullable(m) ? editor.dom.encode(m[group]) : null;
+  };
+  var createId = function () {
+    return 'imagetools' + count++;
+  };
+  var isLocalImage = function (editor, img) {
+    var url = img.src;
+    // console.log(url)
+    return url.indexOf('data:') === 0 || url.indexOf('blob:') === 0 || new global$4(url).host === editor.documentBaseURI.host;
+  };
+  var isCorsImage = function (editor, img) {
+    return global$1.inArray(getCorsHosts(editor), new global$4(img.src).host) !== -1;
+  };
+  var isCorsWithCredentialsImage = function (editor, img) {
+    return global$1.inArray(getCredentialsHosts(editor), new global$4(img.src).host) !== -1;
+  };
+  var defaultFetchImage = function (editor, img) {
+    if (isCorsImage(editor, img)) {
+      return getUrl(img.src, null, isCorsWithCredentialsImage(editor, img));
+    }
+    if (!isLocalImage(editor, img)&&!isEditorAll(editor)) {
+      var proxyUrl = getProxyUrl(editor);
+      // console.log(proxyUrl)
+      var src = proxyUrl + (proxyUrl.indexOf('?') === -1 ? '?' : '&') + 'url=' + encodeURIComponent(img.src);
+      var apiKey = getApiKey(editor);
+      return getUrl(src, apiKey, false);
+    }
+    return imageToBlob$1(img);
+  };
+  var imageToBlob$2 = function (editor, img) {
+    return getFetchImage(editor).fold(function () {
+      return defaultFetchImage(editor, img);
+    }, function (customFetchImage) {
+      return customFetchImage(img);
+    });
+  };
+  var findBlob = function (editor, img) {
+    var blobInfo = editor.editorUpload.blobCache.getByUri(img.src);
+    if (blobInfo) {
+      return global$3.resolve(blobInfo.blob());
+    }
+    return imageToBlob$2(editor, img);
+  };
+  var startTimedUpload = function (editor, imageUploadTimerState) {
+    var imageUploadTimer = global$2.setEditorTimeout(editor, function () {
+      editor.editorUpload.uploadImagesAuto();
+    }, getUploadTimeout(editor));
+    imageUploadTimerState.set(imageUploadTimer);
+  };
+  var cancelTimedUpload = function (imageUploadTimerState) {
+    global$2.clearTimeout(imageUploadTimerState.get());
+  };
+  var updateSelectedImage = function (editor, origBlob, ir, uploadImmediately, imageUploadTimerState, selectedImage, size) {
+    return ir.toBlob().then(function (blob) {
+      var uri, name, filename, blobInfo;
+      var blobCache = editor.editorUpload.blobCache;
+      uri = selectedImage.src;
+      var useFilename = origBlob.type === blob.type;
+      if (shouldReuseFilename(editor)) {
+        blobInfo = blobCache.getByUri(uri);
+        if (isNonNullable(blobInfo)) {
+          uri = blobInfo.uri();
+          name = blobInfo.name();
+          filename = blobInfo.filename();
+        } else {
+          name = extractFilename(editor, uri, 2);
+          filename = extractFilename(editor, uri, 1);
+        }
+      }
+      blobInfo = blobCache.create({
+        id: createId(),
+        blob: blob,
+        base64: ir.toBase64(),
+        uri: uri,
+        name: name,
+        filename: useFilename ? filename : undefined
+      });
+      blobCache.add(blobInfo);
+      editor.undoManager.transact(function () {
+        var imageLoadedHandler = function () {
+          editor.$(selectedImage).off('load', imageLoadedHandler);
+          editor.nodeChanged();
+          if (uploadImmediately) {
+            editor.editorUpload.uploadImagesAuto();
+          } else {
+            cancelTimedUpload(imageUploadTimerState);
+            startTimedUpload(editor, imageUploadTimerState);
+          }
+        };
+        editor.$(selectedImage).on('load', imageLoadedHandler);
+        if (size) {
+          editor.$(selectedImage).attr({
+            width: size.w,
+            height: size.h
+          });
+        }
+        editor.$(selectedImage).attr({ src: blobInfo.blobUri() }).removeAttr('data-mce-src');
+      });
+      return blobInfo;
+    });
+  };
+  var selectedImageOperation = function (editor, imageUploadTimerState, fn, size) {
+    return function () {
+      var imgOpt = getSelectedImage(editor);
+      return imgOpt.fold(function () {
+        displayError(editor, 'Could not find selected image');
+      }, function (img) {
+        return editor._scanForImages().then(function () {
+          return findBlob(editor, img.dom);
+        }).then(function (blob) {
+          return blobToImageResult(blob).then(fn).then(function (imageResult) {
+            return updateSelectedImage(editor, blob, imageResult, false, imageUploadTimerState, img.dom, size);
+          });
+        }).catch(function (error) {
+          displayError(editor, error);
+        });
+      });
+    };
+  };
+  var rotate$2 = function (editor, imageUploadTimerState, angle) {
+    return function () {
+      var imgOpt = getSelectedImage(editor);
+      var flippedSize = imgOpt.fold(function () {
+        return null;
+      }, function (img) {
+        var size = getImageSize(img.dom);
+        return size ? {
+          w: size.h,
+          h: size.w
+        } : null;
+      });
+      return selectedImageOperation(editor, imageUploadTimerState, function (imageResult) {
+        return rotate$1(imageResult, angle);
+      }, flippedSize)();
+    };
+  };
+  var flip$2 = function (editor, imageUploadTimerState, axis) {
+    return function () {
+      return selectedImageOperation(editor, imageUploadTimerState, function (imageResult) {
+        return flip$1(imageResult, axis);
+      })();
+    };
+  };
+  var handleDialogBlob = function (editor, imageUploadTimerState, img, originalSize, blob) {
+    return blobToImage$1(blob).then(function (newImage) {
+      var newSize = getNaturalImageSize(newImage);
+      if (originalSize.w !== newSize.w || originalSize.h !== newSize.h) {
+        if (getImageSize(img)) {
+          setImageSize(img, newSize);
+        }
+      }
+      URL.revokeObjectURL(newImage.src);
+      return blob;
+    }).then(blobToImageResult).then(function (imageResult) {
+      return updateSelectedImage(editor, blob, imageResult, true, imageUploadTimerState, img);
+    });
+  };
+
+  var saveState = 'save-state';
+  var disable = 'disable';
+  var enable = 'enable';
+
+  var createState = function (blob) {
+    return {
+      blob: blob,
+      url: URL.createObjectURL(blob)
+    };
+  };
+  var makeOpen = function (editor, imageUploadTimerState) {
+    return function () {
+      var getLoadedSpec = function (currentState) {
+        return {
+          title: 'Edit Image',
+          size: 'large',
+          body: {
+            type: 'panel',
+            items: [{
+                type: 'imagetools',
+                name: 'imagetools',
+                label: 'Edit Image',
+                currentState: currentState
+              }]
+          },
+          buttons: [
+            {
+              type: 'cancel',
+              name: 'cancel',
+              text: 'Cancel'
+            },
+            {
+              type: 'submit',
+              name: 'save',
+              text: 'Save',
+              primary: true,
+              disabled: true
+            }
+          ],
+          onSubmit: function (api) {
+            var blob = api.getData().imagetools.blob;
+            originalImgOpt.each(function (originalImg) {
+              originalSizeOpt.each(function (originalSize) {
+                handleDialogBlob(editor, imageUploadTimerState, originalImg.dom, originalSize, blob);
+              });
+            });
+            api.close();
+          },
+          onCancel: noop,
+          onAction: function (api, details) {
+            switch (details.name) {
+            case saveState:
+              if (details.value) {
+                api.enable('save');
+              } else {
+                api.disable('save');
+              }
+              break;
+            case disable:
+              api.disable('save');
+              api.disable('cancel');
+              break;
+            case enable:
+              api.enable('cancel');
+              break;
+            }
+          }
+        };
+      };
+      var originalImgOpt = getSelectedImage(editor);
+      var originalSizeOpt = originalImgOpt.map(function (origImg) {
+        return getNaturalImageSize(origImg.dom);
+      });
+      originalImgOpt.each(function (img) {
+        getEditableImage(editor, img.dom).each(function (_) {
+          findBlob(editor, img.dom).then(function (blob) {
+            var state = createState(blob);
+            editor.windowManager.open(getLoadedSpec(state));
+          });
+        });
+      });
+    };
+  };
+
+  var register = function (editor, imageUploadTimerState) {
+    global$1.each({
+      mceImageRotateLeft: rotate$2(editor, imageUploadTimerState, -90),
+      mceImageRotateRight: rotate$2(editor, imageUploadTimerState, 90),
+      mceImageFlipVertical: flip$2(editor, imageUploadTimerState, 'v'),
+      mceImageFlipHorizontal: flip$2(editor, imageUploadTimerState, 'h'),
+      mceEditImage: makeOpen(editor, imageUploadTimerState)
+    }, function (fn, cmd) {
+      editor.addCommand(cmd, fn);
+    });
+  };
+
+  var setup = function (editor, imageUploadTimerState, lastSelectedImageState) {
+    editor.on('NodeChange', function (e) {
+      var lastSelectedImage = lastSelectedImageState.get();
+      var selectedImage = getEditableImage(editor, e.element);
+      if (lastSelectedImage && !selectedImage.exists(function (img) {
+          return lastSelectedImage.src === img.src;
+        })) {
+        cancelTimedUpload(imageUploadTimerState);
+        editor.editorUpload.uploadImagesAuto();
+        lastSelectedImageState.set(null);
+      }
+      selectedImage.each(lastSelectedImageState.set);
+    });
+  };
+
+  var register$1 = function (editor) {
+    var cmd = function (command) {
+      return function () {
+        return editor.execCommand(command);
+      };
+    };
+    editor.ui.registry.addButton('rotateleft', {
+      tooltip: 'Rotate counterclockwise',
+      icon: 'rotate-left',
+      onAction: cmd('mceImageRotateLeft')
+    });
+    editor.ui.registry.addButton('rotateright', {
+      tooltip: 'Rotate clockwise',
+      icon: 'rotate-right',
+      onAction: cmd('mceImageRotateRight')
+    });
+    editor.ui.registry.addButton('flipv', {
+      tooltip: 'Flip vertically',
+      icon: 'flip-vertically',
+      onAction: cmd('mceImageFlipVertical')
+    });
+    editor.ui.registry.addButton('fliph', {
+      tooltip: 'Flip horizontally',
+      icon: 'flip-horizontally',
+      onAction: cmd('mceImageFlipHorizontal')
+    });
+    editor.ui.registry.addButton('editimage', {
+      tooltip: 'Edit image',
+      icon: 'edit-image',
+      onAction: cmd('mceEditImage'),
+      onSetup: function (buttonApi) {
+        var setDisabled = function () {
+          var disabled = getSelectedImage(editor).forall(function (element) {
+            return getEditableImage(editor, element.dom).isNone();
+          });
+          buttonApi.setDisabled(disabled);
+        };
+        editor.on('NodeChange', setDisabled);
+        return function () {
+          editor.off('NodeChange', setDisabled);
+        };
+      }
+    });
+    editor.ui.registry.addButton('imageoptions', {
+      tooltip: 'Image options',
+      icon: 'image',
+      onAction: cmd('mceImage')
+    });
+    editor.ui.registry.addContextMenu('imagetools', {
+      update: function (element) {
+        return getEditableImage(editor, element).fold(function () {
+          return [];
+        }, function (_) {
+          return [{
+              text: 'Edit image',
+              icon: 'edit-image',
+              onAction: cmd('mceEditImage')
+            }];
+        });
+      }
+    });
+  };
+
+  var register$2 = function (editor) {
+    editor.ui.registry.addContextToolbar('imagetools', {
+      items: getToolbarItems(editor),
+      predicate: function (elem) {
+        return getEditableImage(editor, elem).isSome();
+      },
+      position: 'node',
+      scope: 'node'
+    });
+  };
+
+  function Plugin () {
+    global.add('imagetools', function (editor) {
+      var imageUploadTimerState = Cell(0);
+      var lastSelectedImageState = Cell(null);
+      register(editor, imageUploadTimerState);
+      register$1(editor);
+      register$2(editor);
+      setup(editor, imageUploadTimerState, lastSelectedImageState);
+    });
+  }
+
+  Plugin();
+
+}());

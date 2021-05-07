@@ -11,8 +11,9 @@
  */
 tinymce.PluginManager.add('bdmap', function(editor, url) {
 	var pluginName='插入百度地图';
-	var baseURL=tinymce.baseURL||'.';
-  var iframe1 = baseURL+'/plugins/bdmap/map.html';
+	var bdmap_opt = editor.getParam('bdmap_options', {width: 560,height: 360,outputIframe: './plugins/bdmap/bd.html'});
+	var baseURL= tinymce.baseURL || '.';
+	var iframe1 = baseURL+'/plugins/bdmap/map.html';
 	window.tinymceLng='';
 	window.tinymceLat='';
 	window.tinymceBDZoom='';
@@ -57,10 +58,10 @@ tinymce.PluginManager.add('bdmap', function(editor, url) {
 					case 'save':
 						tinymceBDBoxHtml = tinymceBDBoxHtml.replace(/\'/g,'￥').replace(/\"/g,'^').replace(/\>/g,'】').replace(/\</g,'【');
 						tinymceBDBgColor = 	tinymceBDBgColor.replace(/\#/g,'@').replace(/\(/g,'+').replace(/\)/g,'-');
-						html='<iframe data-tag="bdMap" src="'+baseURL+'/plugins/bdmap/bd.html?center='+tinymceLng+'%2C'+tinymceLat+'&zoom='+(tinymceBDZoom?tinymceBDZoom:'14')+'&bwidth='+tinymceBDBoxW+'&bheight='+tinymceBDBoxH+'&boxhtml='+tinymceBDBoxHtml+'&DH='+tinymceBDDH+'&bgColor='+tinymceBDBgColor+'&SF='+tinymceBDSF+'&dName='+tinymceBDDName+'" frameborder="0" style=" min-height: 100px;border:#ccc solid 1px;" height="200px" width="400px">';
+						html='<iframe data-tag="bdMap" src="'+bdmap_opt.outputIframe+'?center='+tinymceLng+'%2C'+tinymceLat+'&zoom='+(tinymceBDZoom?tinymceBDZoom:'14')+'&bwidth='+tinymceBDBoxW+'&bheight='+tinymceBDBoxH+'&boxhtml='+tinymceBDBoxHtml+'&DH='+tinymceBDDH+'&bgColor='+tinymceBDBgColor+'&SF='+tinymceBDSF+'&dName='+tinymceBDDName+'" frameborder="0" style=" min-height: 100px;border:#ccc solid 1px;" height="'+bdmap_opt.height+'" width="'+bdmap_opt.width+'">';
 					 editor.insertContent(html)
-					 var editorContent = getContent(editor);
-					 setContent(editor,  editorContent);
+					//  var editorContent = getContent(editor);
+					//  setContent(editor,  editorContent);
 							tinymceLng='';
 							tinymceLat='';
 							tinymceBDZoom='';

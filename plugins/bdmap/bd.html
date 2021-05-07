@@ -35,7 +35,7 @@
         return width;
      }
 	function getParam(name) {
-		return location.href.match(new RegExp('[?&]' + name + '=([^?&]+)', 'i')) ? decodeURIComponent(RegExp.$1) : '';
+		return location.href.match(new RegExp('[#&]' + name + '=([^#&]+)', 'i')) ? decodeURIComponent(RegExp.$1) : '';
 	}
 
 	var centerParam = getParam('center');
