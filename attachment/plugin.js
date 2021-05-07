@@ -11,7 +11,7 @@
 !function() {
 	"use strict";
 	var Qeider = null;
-  var baseURL=tinymce.baseURL||'.';
+
 	function d(e, t) {
 		if (void 0 === t && (t = 2), 0 === e) return "0 B";
 		var n = t < 0 ? 0 : t,
@@ -70,6 +70,7 @@
 			scope: "node"
 		})
 	}
+
 	var global$1 = tinymce.util.Tools.resolve('tinymce.util.Promise');
 	var global$2 = tinymce.util.Tools.resolve('tinymce.Env');
 	var global$3 = tinymce.util.Tools.resolve('tinymce.util.Delay');
@@ -109,13 +110,15 @@
 				null != n && n(t)
 			}, e.click()
 		},
+		
 		r = function(a, t, n) {
 			var e, i, o, c, r, l, p, _, f, s = a.getParam("attachment_max_size") || 209715200;
+		
 			t.size > s ? (e = d(s), a.notificationManager.open({
 				text: "附件最大支持 " + e + "，超过 " + e + " 的附件将不会被上传。",
 				type: "warning",
 				timeout: 5e3
-			})) : (i = a.getParam("attachment_upload_handler"), o = a.getParam("attachment_assets_path") || baseURL+"/plugins/attachment/icons", c = a.dom.uniqueId(), r = "attachment_" + c, l = d(t.size), p = o + "/" +
+			})) : (i = a.getParam("attachment_upload_handler"), o = a.getParam('attachment_icons_path','./plugins/attachment/icons'), c = a.dom.uniqueId(), r = "attachment_" + c, l = d(t.size), p = o + "/" +
 			function(e) {
 				if (e) {
 					var t = e.lastIndexOf(".");
@@ -375,6 +378,12 @@
 			return t = t || e.selection.getNode(), e.dom.getParent(t, 'span[class="attachment"]')
 		};
 	tinymce.PluginManager.add("attachment", function(e, t) {
+		// console.log(e)
+		e.__proto__.getContent = function (_g) {
+			return function () {
+			 return	arguments&&arguments.length==0?'<style>'+e.getParam("attachment_style",'.attachment>img{display:inline-block!important;max-width:30px!important;}.attachment>a{display:contents!important;}','string')+'</style>' + _g.apply(this, arguments).replace(/<style>([\S\s\t]*?)<\/style>/gi,''): _g.apply(this, arguments);
+			}
+		}(e.__proto__.getContent);
 		var n, c;
 		o(e), (n = e).addCommand("mceAttachment", function() {
 			i(n)
