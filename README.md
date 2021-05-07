@@ -16,9 +16,8 @@ This is tinymce plugins
 [个人博客](https://fivecc.cn)
 
 QQ邮箱: fivecc@qq.com
-```bash
- npm i @npkg/tinymce-plugins 或 cnpm i @npkg/tinymce-plugins -D
-```
+
+
 ## 简述
 This is tinymce plugins
 该项目主要为 tinymce 富文本编译器的扩展插件，或增强优化插件
@@ -35,9 +34,14 @@ This is tinymce plugins
  - [x]  axupimgs: 多图上传。可同时上传多组图片，支持vue;
  - [x]  attachment: 附件上传。拥有附件类型对应图标，支持vue;
  
- 
+## 下载
+
+```bash
+ npm i @npkg/tinymce-plugins 或 cnpm i @npkg/tinymce-plugins -D
+```
 ## 使用说明
   未使用过 tinymce ，可以查看莫若卿大佬的 [tinymce  中文文档 ](http://tinymce.ax-z.cn/)
+
    ####  imagetools 使用方法：
   增强效果：
   ![在这里插入图片描述](https://s3.ax1x.com/2020/12/28/ro4Lng.png)
@@ -404,7 +408,23 @@ tinymce.init({
 | ...
 
 ```
+#### 引入
 
+可以全部引入
+```javascript
+ import '@npkg/tinymce-plugins'
+```
+也可以按需引入
+```javascript
+import '@npkg/tinymce-plugins/importword' 
+import '@npkg/tinymce-plugins/lineheight' 
+import '@npkg/tinymce-plugins/layout' 
+import '@npkg/tinymce-plugins/letterspacing' 
+import '@npkg/tinymce-plugins/indent2em' 
+import '@npkg/tinymce-plugins/upfile' 
+import '@npkg/tinymce-plugins/imagetools'
+import '@npkg/tinymce-plugins/attachment'
 
+```
 #### 欢迎提出建议，动手点赞 ，或提pr
    
