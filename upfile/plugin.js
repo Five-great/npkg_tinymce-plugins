@@ -40,7 +40,7 @@ tinymce.PluginManager.add('upfile', function(editor, url) {
 				switch (details.name) {
 					case 'save':
 						var res = upfile.res;
-						var html = '<span  class="attachment" contenteditable="false"><a href="'+res.url+'" target="_blank" title="'+res.text+'" >'+res.text+'<a></span>';
+						var html = '<span  class="upfile" contenteditable="false"><a href="'+res.url+'" target="_blank" title="'+res.text+'" >'+res.text+'<a></span>';
 						editor.insertContent(html);
 						upfile.res={};
 						api.close();
@@ -62,6 +62,35 @@ tinymce.PluginManager.add('upfile', function(editor, url) {
 			openDialog();
 		}
 	});
+	function createHref(e) {
+		var t = document.createElement("a");
+		t.target = "_blank", t.href = e, t.rel = "noreferrer noopener";
+		var n, i, o = document.createEvent("MouseEvents");
+		o.initMouseEvent("click", !0, !0, window, 0, 0, 0, 0, 0, !1, !1, !1, !1, 0, null), n = t, i = o, document.body.appendChild(n), n.dispatchEvent(i), document.body.removeChild(n)
+	}
+	  function getParent(e, t) {
+		return t = t || e.selection.getNode(), e.dom.getParent(t, 'span[class="upfile"]')
+	};
+	editor.ui.registry.addButton("upfile-download", {
+		text: "下载",
+		onAction: function() {
+			return e = function(e) {
+				for (var t = 0, n = e.selection.getNode().children; t < n.length; t++) {
+					var i = n[t];
+					if (i.hasAttribute("href")) return i.getAttribute("href")
+				}
+				return "#"
+			}(editor), void createHref(editor);
+		}
+	})
+	editor.ui.registry.addContextToolbar("upfile", {
+		predicate: function(e) {
+			return !!getParent(editor, e)
+		},
+		items: "upfile-download",
+		position: "node",
+		scope: "node"
+	})
 	editor.ui.registry.addMenuItem('upfile', {
 		icon: 'upfile',
 		text: '图片上传...',

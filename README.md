@@ -424,6 +424,7 @@ import '@npkg/tinymce-plugins/indent2em'
 import '@npkg/tinymce-plugins/upfile' 
 import '@npkg/tinymce-plugins/imagetools'
 import '@npkg/tinymce-plugins/attachment'
+import '@npkg/tinymce-plugins/axupimgs'
 
 ```
 #### 欢迎提出建议，动手点赞 ，或提pr

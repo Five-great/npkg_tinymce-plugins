@@ -1,14 +1,4 @@
 
- /**
- * axupimgs (Enhancement 1.5v) 2021-01-13
- * 
- * 
- * https://github.com/Five-great/tinymce-plugins
- * 
- * Copyright 2021, Five(Li Hailong) The Chengdu, China https://www.fivecc.cn/
- *
- * Licensed under MIT
- */
  tinymce.PluginManager.add('axupimgs', function(editor, url) {
 	var pluginName='Ax多图片上传';
 	window.axupimgs={}; //扔外部公共变量，也可以扔一个自定义的位置
