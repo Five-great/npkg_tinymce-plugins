@@ -25,7 +25,7 @@
   ],
   "dependencies": {
     "wx-wow": "latest"
-  } 
+  },
   "author": "Li Hailong",
   "license": "MIT",
   "bugs": {
